@@ -6,6 +6,7 @@ import { commitRepo } from "./controllers/commit.js";
 import { pushRepo } from "./controllers/push.js";
 import { pullRepo } from "./controllers/pull.js";
 import { revertRepo } from "./controllers/revert.js";
+import { argv } from "process";
 
 yargs(hideBin(process.argv))
     .command('init',"Initialise a new repository",{},initRepo)
@@ -18,7 +19,9 @@ yargs(hideBin(process.argv))
             type: "string",
         });
         },
-        addRepo
+        (argv) =>{
+            addRepo(argv.file);
+        }
      )
     .command(
         "commit <message>",
