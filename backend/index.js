@@ -2,6 +2,10 @@ import yargs  from "yargs";
 import {hideBin} from "yargs/helpers"
 import { initRepo } from "./controllers/inti.js";
 import { addRepo } from "./controllers/add.js";
+import { commitRepo } from "./controllers/commit.js";
+import { pushRepo } from "./controllers/push.js";
+import { pullRepo } from "./controllers/pull.js";
+import { revertRepo } from "./controllers/revert.js";
 
 yargs(hideBin(process.argv))
     .command('init',"Initialise a new repository",{},initRepo)
@@ -16,5 +20,29 @@ yargs(hideBin(process.argv))
         },
         addRepo
      )
+    .command(
+        "commit <message>",
+        "Commit the staged files",
+        (yargs) => {
+        yargs.positional("message", {
+            describe: "Commit message",
+            type: "string",
+        });
+        },
+        commitRepo
+    )
+    .command("push", "Push commits to S3", {}, pushRepo)
+    .command("pull", "Pull commits from S3", {}, pullRepo)
+    .command(
+        "revert <commitID>",
+        "Revert to a specific commit",
+        (yargs) => {
+        yargs.positional("commitID", {
+            describe: "Comit ID to revert to",
+            type: "string",
+        });
+        },
+        revertRepo
+    )
     .demandCommand(1, "You need at least one command")
     .help().argv
