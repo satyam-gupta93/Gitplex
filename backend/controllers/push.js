@@ -24,6 +24,7 @@ const  pushRepo = async () => {
       }
     }
 
+    
     console.log("All commits pushed to Cloudinary");
   } catch (err) {
     console.error("Error pushing to Cloudinary:", err);
