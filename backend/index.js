@@ -15,6 +15,7 @@ import http from "http"
 import bodyParser from "body-parser";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
+import mainRouter from "./routes/mainRouter.js";
 
 
 
@@ -83,12 +84,12 @@ function startServer() {
         origin:"*"   
     }))
 
+    app.use("/",mainRouter);
+
     connectDB();
 
 
-    app.get("/",(req,res) =>{
-        res.send("Hello");
-    })
+
 
     let user = "test";
 
