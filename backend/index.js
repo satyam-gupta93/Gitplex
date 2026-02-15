@@ -9,6 +9,7 @@ import { revertRepo } from "./controllers/revert.js";
 import { argv } from "process";
 
 yargs(hideBin(process.argv))
+     .command("start", "Starts a new server", {}, startServer)
     .command('init',"Initialise a new repository",{},initRepo)
     .command(
         "add <file>",
@@ -54,3 +55,9 @@ yargs(hideBin(process.argv))
     )
     .demandCommand(1, "You need at least one command")
     .help().argv
+
+
+
+function startServer() {
+  console.log("Server logic called");
+}

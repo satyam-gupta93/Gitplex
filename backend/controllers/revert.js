@@ -16,7 +16,7 @@ const revertRepo = async (commitID) => {
       .expression(`public_id:commits/${commitID}/*`)
       .max_results(500)
       .execute();
-
+    
     const files = result.resources;
 
     if (!files || files.length === 0) {
