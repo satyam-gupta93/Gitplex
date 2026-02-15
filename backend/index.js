@@ -7,6 +7,12 @@ import { pushRepo } from "./controllers/push.js";
 import { pullRepo } from "./controllers/pull.js";
 import { revertRepo } from "./controllers/revert.js";
 import { argv } from "process";
+import dotenv from "dotenv";
+import connectDB from "./config/mongodbConfig.js";
+
+
+dotenv.config();
+
 
 yargs(hideBin(process.argv))
      .command("start", "Starts a new server", {}, startServer)
@@ -60,4 +66,6 @@ yargs(hideBin(process.argv))
 
 function startServer() {
   console.log("Server logic called");
+  
+  connectDB();
 }
