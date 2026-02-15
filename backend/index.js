@@ -9,6 +9,13 @@ import { revertRepo } from "./controllers/revert.js";
 import { argv } from "process";
 import dotenv from "dotenv";
 import connectDB from "./config/mongodbConfig.js";
+import express from "express"
+import cors from "cors"
+import http from "http"
+import bodyParser from "body-parser";
+import { Server } from "socket.io";
+import mongoose from "mongoose";
+
 
 
 dotenv.config();
@@ -65,7 +72,58 @@ yargs(hideBin(process.argv))
 
 
 function startServer() {
-  console.log("Server logic called");
   
-  connectDB();
+    const app = express();
+    const port = process.env.PORT ||  3000;
+
+    app.use(bodyParser.json());
+    app.use(express.json());
+
+    app.use(cors({
+        origin:"*"   
+    }))
+
+    connectDB();
+
+
+    app.get("/",(req,res) =>{
+        res.send("Hello");
+    })
+
+    let user = "test";
+
+    const httpServer = http.createServer(app);
+
+      const io = new Server(httpServer, {
+        cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+        },
+    });
+
+      io.on("connection", (socket) => {
+        socket.on("joinRoom", (userID) => {
+        user = userID;
+        console.log("------");
+        console.log(user);
+        console.log("------");
+        socket.join(userID);
+        });
+    });
+
+    const db = mongoose.connection;
+
+    db.once("open", async () => {
+        console.log("Data layer ready for operations.");
+    });
+
+    httpServer.listen(port,()=>{
+         console.log(`Server is running on PORT ${port}`);
+    })
+
+
+
+
+  
+  
 }
