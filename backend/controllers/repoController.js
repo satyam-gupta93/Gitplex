@@ -58,7 +58,7 @@ const getAllRepositories = async (req, res) => {
         console.error("Error during fetching repositories:", err.message);
         res.status(500).send("Server error");
     }
-    
+
 };
 
 const fetchRepositoryById = async (req, res) => {
@@ -92,10 +92,20 @@ const fetchRepositoryByName = async (req, res) => {
 };
 
 
-const fetchRepositoryForCurrentUser = (req,res) =>{
-    res.send("Repositories for Logged in user fetched!");
-}
+const fetchRepositoriesForCurrentUser = async (req, res) => {
+    try {
+        const repositories = await Repository.find({ owner: req.params.userID });
 
+        if (!repositories.length) {
+        return res.status(404).json({ error: "User Repositories not found!" });
+        }
+
+        res.json({ message: "Repositories found!", repositories });
+    } catch (err) {
+        console.error("Error during fetching user repositories:", err.message);
+        res.status(500).send("Server error");
+    }
+};
 const updateRepositoryById = (req,res) =>{
     res.send("Repository Updated!");
 }
