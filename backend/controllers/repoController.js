@@ -131,10 +131,20 @@ const updateRepositoryById = async (req, res) => {
     }
 };
 
-const deleteRepositoryById = (req,res) =>{
-    res.send("Repository Deleted!");
-}
+const deleteRepositoryById = async (req, res) => {
+    try {
+        const repository = await Repository.findByIdAndDelete(req.params.id);
 
+        if (!repository) {
+             return res.status(404).json({ error: "Repository not found!" });
+        }
+
+        res.json({ message: "Repository deleted successfully!" });
+    } catch (err) {
+        console.error("Error during deleting repository:", err.message);
+        res.status(500).send("Server error");
+    }
+};
 const toggleVisibilityById = (req,res) =>{
     res.send("Visibility toggled!");
 }
