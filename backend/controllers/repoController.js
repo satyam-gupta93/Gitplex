@@ -145,9 +145,27 @@ const deleteRepositoryById = async (req, res) => {
         res.status(500).send("Server error");
     }
 };
-const toggleVisibilityById = (req,res) =>{
-    res.send("Visibility toggled!");
-}
+const toggleVisibilityById = async (req, res) => {
+    try {
+        const repository = await Repository.findById(req.params.id);
+
+        if (!repository) {
+            return res.status(404).json({ error: "Repository not found!" });
+        }
+
+        repository.visibility = !repository.visibility;
+
+        const updatedRepository = await repository.save();
+
+        res.json({
+            message: "Repository visibility toggled successfully!",
+            repository: updatedRepository,
+        });
+    } catch (err) {
+        console.error("Error during toggling visibility:", err.message);
+        res.status(500).send("Server error");
+    }
+};
 
 
 export {createRepository,fetchRepositoryById,getAllRepositories,fetchRepositoryForCurrentUser,updateRepositoryById,deleteRepositoryById,toggleVisibilityById,fetchRepositoryByName}
