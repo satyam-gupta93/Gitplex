@@ -58,6 +58,7 @@ const getAllRepositories = async (req, res) => {
         console.error("Error during fetching repositories:", err.message);
         res.status(500).send("Server error");
     }
+    
 };
 
 const fetchRepositoryById = async (req, res) => {
