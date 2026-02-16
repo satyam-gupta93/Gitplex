@@ -95,13 +95,49 @@ const getUserProfile = async (req, res) => {
     }
 };
 
+const updateUserProfile = async (req, res) => {
+    const { email, password } = req.body;
 
-const updateUserProfile = (req,res) =>{
-    res.send("Profile Updated!");
-}
+    try {
+        let updateFields = { email };
 
-const deleteUserProfile = (req,res) =>{
-    res.send("Profile deleted");
-}
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            updateFields.password = hashedPassword;
+        }
+
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { $set: updateFields },
+            { new: true }
+        ).select("-password");
+
+        if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+        }
+
+        res.json(user);
+    } catch (err) {
+        console.error("Error during updating:", err.message);
+        res.status(500).send("Server error!");
+    }
+};
+
+const deleteUserProfile = async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+
+        if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+        }
+
+        res.json({ message: "User Profile Deleted!" });
+    } catch (err) {
+        console.error("Error during deleting:", err.message);
+        res.status(500).send("Server error!");
+    }
+    };
+
 
 export {getAllUsers,signup,login,getUserProfile,updateUserProfile,deleteUserProfile}
