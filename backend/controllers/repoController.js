@@ -47,19 +47,49 @@ const createRepository = async (req, res) => {
         res.status(500).send("Server error");
     }
 };
+const getAllRepositories = async (req, res) => {
+    try {
+        const repositories = await Repository.find()
+        .populate("owner", "-password")
+        .populate("issues");
 
+        res.json(repositories);
+    } catch (err) {
+        console.error("Error during fetching repositories:", err.message);
+        res.status(500).send("Server error");
+    }
+};
 
-const getAllRepositories = (req,res) =>{
-    res.send("All repository fetched!");
-}
+const fetchRepositoryById = async (req, res) => {
+    try {
+        const repository = await Repository.findById(req.params.id)
+        .populate("owner", "-password")
+        .populate("issues");
 
-const fetchRepositoryById = (req,res) =>{
-    res.send("Repository Detail Fetched!");
-}
+        if (!repository) {
+        return res.status(404).json({ message: "Repository not found!" });
+        }
 
-const fetchRepositoryByName = (req,res) =>{
-    res.send("Repository Detail Fetched!");
-}
+        res.json(repository);
+    } catch (err) {
+        console.error("Error during fetching repository:", err.message);
+        res.status(500).send("Server error");
+    }
+};
+
+const fetchRepositoryByName = async (req, res) => {
+    try {
+        const repositories = await Repository.find({ name: req.params.name })
+        .populate("owner", "-password")
+        .populate("issues");
+
+        res.json(repositories);
+    } catch (err) {
+        console.error("Error during fetching repository:", err.message);
+        res.status(500).send("Server error");
+    }
+};
+
 
 const fetchRepositoryForCurrentUser = (req,res) =>{
     res.send("Repositories for Logged in user fetched!");
