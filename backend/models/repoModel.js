@@ -1,11 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
 const RepositorySchema = new Schema({
-    timestamps: true,
+   
     name: {
         type: String,
         required: true,
-        unique: true,
+        
     },
     description: {
         type: String,
@@ -29,7 +29,11 @@ const RepositorySchema = new Schema({
         ref: "Issue",
         },
     ],
-});
+    },
+     { timestamps: true }
+);
+
+RepositorySchema.index({ owner: 1, name: 1 }, { unique: true });
 
 const Repository = mongoose.model("Repository", RepositorySchema);
 

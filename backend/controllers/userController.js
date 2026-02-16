@@ -137,7 +137,7 @@ const deleteUserProfile = async (req, res) => {
         console.error("Error during deleting:", err.message);
         res.status(500).send("Server error!");
     }
-    };
+};
 
 
 export {getAllUsers,signup,login,getUserProfile,updateUserProfile,deleteUserProfile}
