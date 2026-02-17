@@ -47,11 +47,11 @@ const updateIssueById = async (req,res) =>{
     }
 }
 
-const deleteIssueById = (req,res) =>{
+const deleteIssueById =async (req,res) =>{
    const { id } = req.params;
 
     try {
-        const issue = Issue.findByIdAndDelete(id);
+        const issue = await Issue.findByIdAndDelete(id);
 
         if (!issue) {
         return res.status(404).json({ error: "Issue not found!" });
@@ -63,8 +63,20 @@ const deleteIssueById = (req,res) =>{
   }
 }
 
-const getAllIssue = (req,res) =>{
-    res.send("All Issue Feteched!");
+const getAllIssue =async (req,res) =>{
+      const { id } = req.params;
+
+    try {
+        const issues = await Issue.find({ repository: id });
+
+        if (!issues) {
+            return res.status(404).json({ error: "Issues not found!" });
+        }
+        res.status(200).json(issues);
+    } catch (err) {
+        console.error("Error during issue fetching : ", err.message);
+        res.status(500).send("Server error");
+    }
 }
 
 const getIssueById = (req,res) =>{
