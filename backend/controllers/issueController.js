@@ -79,8 +79,20 @@ const getAllIssue =async (req,res) =>{
     }
 }
 
-const getIssueById = (req,res) =>{
-    res.send("Issue Details Feteched!");
+const getIssueById = async(req,res) =>{
+      const { id } = req.params;
+        try {
+            const issue = await Issue.findById(id);
+
+            if (!issue) {
+                return res.status(404).json({ error: "Issue not found!" });
+            }
+
+            res.json(issue);
+        } catch (err) {
+            console.error("Error during issue updation : ", err.message);
+            res.status(500).send("Server error");
+        }
 }
 
 export {createIssue,updateIssueById,deleteIssueById,getAllIssue,getIssueById};
