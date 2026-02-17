@@ -10,9 +10,9 @@ const createIssue = async (req,res) =>{
 
     try {
         const issue = new Issue({
-        title,
-        description,
-        repository: id,
+            title,
+            description,
+            repository: id,
         });
 
     await issue.save();
@@ -24,8 +24,27 @@ const createIssue = async (req,res) =>{
     }
 }
 
-const updateIssueById = (req,res) =>{
-    res.send("Issue Updated!");
+const updateIssueById = async (req,res) =>{
+     const { id } = req.params;
+     const { title, description, status } = req.body;
+    try {
+        const issue = await Issue.findById(id);
+
+        if (!issue) {
+        return res.status(404).json({ error: "Issue not found!" });
+        }
+
+        issue.title = title;
+        issue.description = description;
+        issue.status = status;
+
+        await issue.save();
+
+        res.json(issue, { message: "Issue updated" });
+    } catch (err) {
+        console.error("Error during issue updation : ", err.message);
+        res.status(500).send("Server error");
+    }
 }
 
 const deleteIssueById = (req,res) =>{

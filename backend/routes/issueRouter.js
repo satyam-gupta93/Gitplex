@@ -4,7 +4,7 @@ import { createIssue, deleteIssueById, getAllIssue, getIssueById, updateIssueByI
 
 const issueRouter = express.Router();
 
-issueRouter.post("/issue/create", createIssue);
+issueRouter.post("/issue/create/:id", createIssue);
 issueRouter.put("/issue/update/:id", updateIssueById);
 issueRouter.delete("/issue/delete/:id", deleteIssueById);
 issueRouter.get("/issue/all", getAllIssue);
