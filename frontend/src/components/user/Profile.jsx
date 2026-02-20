@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "../Navbar";
+import Navbar from "../Navar";
 import HeatMapProfile from "./Heatmap";
 import { useAuth } from "../../authContext";
 
 const NAV_TABS = [
-  { label: "Overview", icon: "📋", path: null },
-  { label: "Starred Repositories", icon: "⭐", path: "/repo" },
+  { label: "Overview", icon: "", path: null },
+  { label: "Starred Repositories", icon: "", path: "/repo" },
 ];
 
 const Profile = () => {
